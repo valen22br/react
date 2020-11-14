@@ -1,23 +1,56 @@
-import logo from './logo.svg';
+import React, { useState } from "react";
 import './App.css';
 
+
 function App() {
+
+  const [matrixSize, setMatrixSize] = useState(5);
+  let line = Array(matrixSize).fill(0);
+  let column = Array(matrixSize).fill(0);
+
+  function handleOnChange(value) {
+    let integerValue = parseInt(value, 10);
+    if (isNaN(integerValue)) {
+      integerValue = 0;
+    }
+    return setMatrixSize(integerValue)
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form>
+        <label>
+          Matrix Size:
+                <input
+            type="text"
+            value={matrixSize}
+            onChange={e => handleOnChange(e.target.value)}
+          />
+        </label>
+      </form>
+      {matrixSize > 0 && matrixSize < 100 ?
+        <>
+          <table>
+            <tbody>
+              {line.map((lineValue, lineKey) => {
+                return (
+                  <tr key={`${lineKey}, ${lineValue}`}>
+                    {column.map((columnValue, columnKey) => {
+                      return (
+                        <td key={`<${lineKey}, ${columnKey}>`}>{
+                          (lineKey === columnKey || ((lineKey + columnKey) === (matrixSize - 1)))
+                            ? 'X'
+                            : `.`
+                        }</td>
+                      )
+                    })}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </>
+        : 'The matrix should be from 1 to 99 in size.'}
     </div>
   );
 }
